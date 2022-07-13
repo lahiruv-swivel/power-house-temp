@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.StreamSupport;
@@ -29,6 +30,7 @@ public class BatteryService {
 
         StreamSupport.stream(batteryRepository.findAll().spliterator(), false)
                 .filter( battery -> battery.getPostcode() >= from && battery.getPostcode() <= to)
+                .sorted(Comparator.comparing(Battery::getName))
                 .forEach(battery -> {
                     totalCapacityRef.updateAndGet(v -> v + battery.getCapacity());
                     names.add(battery.getName());
